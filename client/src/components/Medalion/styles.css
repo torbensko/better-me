@@ -1,0 +1,13 @@
+.Medalion {
+  position: relative;
+}
+
+.Medalion svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.Medalion svg:first-child {
+  position: relative;
+}
