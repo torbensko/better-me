@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "heroku-postbuild": "./heroku-build.sh",
+    "start": "cd server && node src/index"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}
