@@ -14,7 +14,7 @@ export interface IMedalionProps {
 }
 
 export const Medalion: React.FC<IMedalionProps> = ({
-  size = 100,
+  size = 30,
   rituals,
   activities
 }) => {
