@@ -1,0 +1,12 @@
+.Toggle {
+  background: #eee;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  padding: 0.6em 0.5em;
+  text-align: center;
+  cursor: pointer;
+}
+.Toggle.-active {
+  background: yellow;
+  border-color: orange;
+}
