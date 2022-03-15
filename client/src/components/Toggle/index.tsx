@@ -5,9 +5,10 @@ import "./styles.css";
 export interface IToggleProps {
   value?: boolean;
   onChange: (value: boolean) => unknown;
+  label: string;
 }
 
-export const Toggle: React.FC<IToggleProps> = ({ value, onChange }) => {
+export const Toggle: React.FC<IToggleProps> = ({ value, onChange, label }) => {
   const [val, setVal] = React.useState<boolean>(value || false);
 
   const onClick = () => {
@@ -17,5 +18,5 @@ export const Toggle: React.FC<IToggleProps> = ({ value, onChange }) => {
 
   const className = `Toggle ${val ? '-active' : ''}`;
 
-  return <div className={className} onClick={onClick}>My Toggle</div>;
+  return <div className={className} onClick={onClick}>{label}</div>;
 };

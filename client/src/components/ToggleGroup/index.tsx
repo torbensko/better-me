@@ -6,5 +6,5 @@ export interface IToggleGroupProps {
 }
 
 export const ToggleGroup: React.FC<IToggleGroupProps> = ({ }) => {
-  return <div><Toggle onChange={() => { }} /></div>;
+  return <div><Toggle onChange={() => { }} label="1" /></div>;
 };
