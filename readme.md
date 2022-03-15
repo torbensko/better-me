@@ -13,8 +13,19 @@ General
 
 Components
 
-- Button
-- ButtonNumberGroup
+- Toggle
+  - on/off
+  - onChange
+- ToggleGroup
+  - count
+  - onChange
 - DayEntry
+  - day: ActivityDay
+  - onSuccess: ActivityDay
 - DayModal
 - Calendar
+
+Improvements
+
+- SASS support
+-
