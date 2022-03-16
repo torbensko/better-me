@@ -1,6 +1,6 @@
 import * as React from "react";
 import dayjs from "dayjs";
-import { times } from "lodash";
+import { random, times } from "lodash";
 
 import "./styles.css";
 import { Medalion } from "../Medalion";
@@ -21,17 +21,17 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
                   rituals={[
                     {
                       name: "dry",
-                      complete: false
+                      complete: !!random(0, 1)
                     },
                     {
                       name: "no-caffine",
-                      complete: true
+                      complete: !!random(0, 1)
                     }
                   ]}
                   activities={[
                     {
                       name: "running",
-                      count: 2
+                      count: random(0, 3)
                     }
                   ]}
                 />
