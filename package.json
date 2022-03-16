@@ -4,6 +4,7 @@
     "start": "cd server && node src/index"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "uuid": "^8.3.2"
   }
 }

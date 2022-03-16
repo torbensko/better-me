@@ -11,6 +11,11 @@ export interface IToggleProps {
 export const Toggle: React.FC<IToggleProps> = ({ value, onChange, label }) => {
   const [val, setVal] = React.useState<boolean>(value || false);
 
+  // watch for changes from the parent
+  React.useEffect(() => {
+    setVal(!!value);
+  }, [value]);
+
   const onClick = () => {
     setVal(!val);
     onChange(!val);

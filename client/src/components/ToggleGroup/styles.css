@@ -1,0 +1,7 @@
+.ToggleGroup {
+  display: flex;
+  flex-direction: row;
+}
+.ToggleGroup > * {
+  flex-grow: 1;
+}
