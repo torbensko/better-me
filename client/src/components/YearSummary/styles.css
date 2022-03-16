@@ -1,0 +1,9 @@
+.YearSummary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.YearSummary .month {
+}
+.YearSummary .day {
+}
