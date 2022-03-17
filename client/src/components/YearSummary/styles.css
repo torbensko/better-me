@@ -6,4 +6,29 @@
 .YearSummary .month {
 }
 .YearSummary .day {
+  position: relative;
+  /* HACK should match the visualisation */
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.YearSummary .day > div {
+  position: relative;
+  height: 100%;
+  z-index: 1;
+}
+.YearSummary .day .dayNumber {
+  position: absolute;
+  border: 0.5px solid rgba(0,0,0,0.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 6pt;
 }

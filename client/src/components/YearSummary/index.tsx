@@ -16,6 +16,7 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
           <div className="month">
             {times(dayCount, (day) => (
               <div className="day">
+                <div className="dayNumber">{day}</div>
                 <Medalion
                   size={20}
                   rituals={[
