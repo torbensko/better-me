@@ -9,8 +9,12 @@ export interface IToggleGroupProps {
   onChange: (value: number) => unknown;
 }
 
-export const ToggleGroup: React.FC<IToggleGroupProps> = ({ count, onChange }) => {
+export const ToggleGroup: React.FC<IToggleGroupProps> = ({
+  count,
+  onChange
+}) => {
   const [val, setVal] = useState<number>(0);
+
   const onToggleClick = (i: number) => {
     // toggle off if clicking the same value again
     if (i === val) {
@@ -19,6 +23,8 @@ export const ToggleGroup: React.FC<IToggleGroupProps> = ({ count, onChange }) =>
     setVal(i);
     onChange && onChange(i);
   };
+
+  console.log("val", val);
 
   return (
     <div className="ToggleGroup">
