@@ -1,16 +1,21 @@
 const uuid = require("uuid");
 
 exports.seed = function (knex) {
-  // Deletes ALL existing entries
-  return knex("ideas")
-    .del()
-    .then(function () {
-      // Inserts seed entries
-      return knex("subscriptions").insert([
+  return knex("subscription")
+    .insert([
+      {
+        id: "abcd",
+        title: "Example subscription"
+      }
+    ])
+    .then(() => {
+      return knex("activity").insert([
         {
-          id: "ABCD"
-          title: "Torben's",
-        },
+          title: "Running",
+          maxCount: 2,
+          type: "activity",
+          subscription: "abcd"
+        }
       ]);
     });
 };
