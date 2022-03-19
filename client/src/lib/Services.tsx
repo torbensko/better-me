@@ -1,5 +1,7 @@
 import axios from "axios";
-import { ActivityType, IActivityType } from "../models/ActivityType";
+import { IActivityType } from "../types/IActivityType";
+import { IDay } from "../types/IDay";
+import { ISubscription } from "../types/ISubscription";
 
 export const serverUrl: string = process.env.REACT_APP_SERVICES_URL as string;
 
@@ -7,16 +9,32 @@ export const serverUrl: string = process.env.REACT_APP_SERVICES_URL as string;
  * Simple class for talking to the services.
  */
 export interface IServices {
-  fetchActivityTypes: () => Promise<ActivityType>;
+  createSubscription: (subscription: string) => Promise<ISubscription>;
+  fetchActivityTypes: (subscription: string) => Promise<IActivityType[]>;
+  fetchDays: (subscription: string) => Promise<IDay[]>;
+  createDay: (day: IDay) => Promise<IDay>;
 }
 
 export class Services implements IServices {
   constructor() {
     axios.defaults.baseURL = serverUrl;
   }
+  async createSubscription(subcription: string) {
+    const { data } = await axios.post(`subscriptions`, {
+      data: { subcription }
+    });
+    return data;
+  }
   async fetchActivityTypes() {
     const { data } = await axios.get(`activity-types`);
-    // TODO some safety checks
-    return data.activityTypes.map((a: IActivityType) => new ActivityType(a));
+    return data.activityTypes;
+  }
+  async fetchDays(subscription: string) {
+    const { data } = await axios.get(`subscriptions/${subscription}/days`);
+    return data.activityTypes;
+  }
+  async createDay(day: IDay) {
+    const { data } = await axios.post(`day`, { data: { day } });
+    return data;
   }
 }

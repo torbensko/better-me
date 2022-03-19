@@ -1,13 +1,16 @@
 import * as React from "react";
+import { useActivities } from "../../hooks/useActivities";
 import { Toggle } from "../Toggle";
-import { Day } from "./types";
+import { IDay } from "../../types/IDay";
 
 export interface IDayEditorProps {
-  initDay: Day;
+  initDay: IDay;
 }
 
 export const DayEditor: React.FC<IDayEditorProps> = ({ initDay }) => {
-  const [day, setDay] = React.useState<Day>(initDay);
+  const [day, setDay] = React.useState<IDay>(initDay);
+
+  const { activities, rituals } = useActivities();
 
   // const id: string[] = day.activities.map((c, i) => c.category.id);
 

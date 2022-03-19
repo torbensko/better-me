@@ -1,14 +1,20 @@
 import * as React from "react";
+import { parseUrl } from "query-string";
 import { useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+
 import { Services } from "../../lib/Services";
+
+const PARAM_SUBSCRIPTION = "key";
 
 export interface IAppContextValue {
   services: Services;
+  subscription?: string;
 }
 
 export const AppContext = React.createContext<IAppContextValue>({
-  services: new Services()
+  services: new Services(),
+  subscription: undefined
 });
 
 export interface IAppProviderProps {}
@@ -25,8 +31,17 @@ export const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     }
   });
 
+  const subscription = useMemo(() => {
+    const url = parseUrl(window.location.href, {
+      parseBooleans: true,
+      parseNumbers: true,
+      arrayFormat: "bracket"
+    }).query;
+    return url[PARAM_SUBSCRIPTION] as string;
+  }, []);
+
   const value = useMemo(() => {
-    return { services: new Services() };
+    return { services: new Services(), subscription };
   }, []);
 
   return (

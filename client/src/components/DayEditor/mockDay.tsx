@@ -1,6 +1,6 @@
-import { Day } from "./types";
+import { IDay } from "../../types/IDay";
 
-export const mockDay: Day = {
+export const mockDay: IDay = {
   rituals: [
     {
       timesPerformed: 0,

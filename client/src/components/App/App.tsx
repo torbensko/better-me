@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import "./App.css";
-import { AppProvider } from "../../hooks/useApp/AppProvider";
+import { AppProvider } from "../../providers/AppProvider";
 
 interface IAppProps {}
 
