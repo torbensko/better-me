@@ -1,19 +1,18 @@
-interface Category {
+export interface Activity {
   id: string;
   color: string;
   label: string;
   type: "ritual" | "activity";
-  // only activities
-  count?: number;
+  maxCount?: number;
 }
 
-interface ICategoriesPerformed {
-  category: Category;
+export interface IActivityPerformed {
+  activity: Activity;
   timesPerformed: number;
 }
 
 export interface Day {
-  rituals: ICategoriesPerformed[];
-  activities: ICategoriesPerformed[];
-  dayPerformed: number;
+  rituals: IActivityPerformed[];
+  activities: IActivityPerformed[];
+  date: string;
 }

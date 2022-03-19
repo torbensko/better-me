@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Toggle } from "../Toggle";
-import { ToggleGroup } from "../ToggleGroup";
 import { Day } from "./types";
 
 export interface IDayEditorProps {
@@ -12,15 +11,24 @@ export const DayEditor: React.FC<IDayEditorProps> = ({ initDay }) => {
 
   // const id: string[] = day.activities.map((c, i) => c.category.id);
 
-  return <div>
-    <h4>Rituals</h4>
-    {day.rituals.map((ritual, i) => {
-      const newCount = i + 1;
-      const onClick = () => {
-        ritual.timesPerformed = ritual.timesPerformed === newCount ? 0 : newCount;
-      }
-      return <Toggle label={ritual.category.label} onChange={onClick} value={ritual.timesPerformed > 0} />
-    })}
-    <h4>Activities</h4>
-  </div>;
+  return (
+    <div>
+      <h4>Rituals</h4>
+      {day.rituals.map((ritual, i) => {
+        const newCount = i + 1;
+        const onClick = () => {
+          ritual.timesPerformed =
+            ritual.timesPerformed === newCount ? 0 : newCount;
+        };
+        return (
+          <Toggle
+            label={ritual.activity.label}
+            onChange={onClick}
+            value={ritual.timesPerformed > 0}
+          />
+        );
+      })}
+      <h4>Activities</h4>
+    </div>
+  );
 };
