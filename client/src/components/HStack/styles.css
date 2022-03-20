@@ -1,0 +1,13 @@
+.HStack {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.HStack > * {
+  margin-left: 10px;
+  margin-right: 10px;
+}

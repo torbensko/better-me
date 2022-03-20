@@ -1,0 +1,8 @@
+.ActivityEditor {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.twitter-picker {
+  box-shadow: none !important;
+}

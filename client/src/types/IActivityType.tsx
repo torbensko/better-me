@@ -1,7 +1,7 @@
 import { TActivityType } from "./TActivityType";
 
 export interface IActivityType {
-  id: number;
+  id?: number;
   title: string;
   color: string;
   type: TActivityType;

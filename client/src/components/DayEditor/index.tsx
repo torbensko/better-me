@@ -42,7 +42,7 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
       rituals: (rituals || []).map((activity) => {
         // find previous data
         const priorActivity =
-          initDay?.activities.find((a) => a.activity.id === activity.id)
+          initDay?.rituals.find((a) => a.activity.id === activity.id)
             ?.timesPerformed || 0;
         const performance: IActivityPerformed = {
           activity: activity,
