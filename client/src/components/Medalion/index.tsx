@@ -6,18 +6,14 @@ import "./styles.css";
 import { DonutChart } from "./helpers/DonutChart";
 import { removeChildren } from "./helpers/removeChildren";
 import { IData } from "./helpers/IData";
+import { IDay } from "../../types/IDay";
 
 export interface IMedalionProps {
   size?: number;
-  rituals: { name: string; complete: boolean }[];
-  activities: { name: string; count: number }[];
+  day: IDay;
 }
 
-export const Medalion: React.FC<IMedalionProps> = ({
-  size = 30,
-  rituals,
-  activities
-}) => {
+export const Medalion: React.FC<IMedalionProps> = ({ size = 30, day }) => {
   const medalion = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,10 +25,10 @@ export const Medalion: React.FC<IMedalionProps> = ({
     const activitiesOuterRadius = (size * 0.8) / 2;
     const activitiesInnerRadius = (size * 0) / 2;
 
-    const ritualData: IData[] = rituals.map((r) => ({
-      name: r.name,
+    const ritualData: IData[] = day.rituals.map((r) => ({
+      name: r.activity.title,
       size: 1,
-      visible: r.complete
+      visible: r.timesPerformed > 0
     }));
 
     const ritualsSvg = DonutChart(ritualData, {
@@ -45,13 +41,16 @@ export const Medalion: React.FC<IMedalionProps> = ({
     });
     medalion.current?.appendChild(ritualsSvg);
 
-    const activitiesData: IData[] = activities.map((a) => ({
-      name: a.name,
-      size: a.count
+    const activitiesData: IData[] = day.activities.map((a) => ({
+      name: a.activity.title,
+      size: a.timesPerformed
     }));
 
     const maxActivities = 3;
-    const activityCount = activities.reduce((total, x) => x.count + total, 0);
+    const activityCount = day.activities.reduce(
+      (total, x) => x.timesPerformed + total,
+      0
+    );
     const sizeScale = activityCount / Math.max(activityCount, maxActivities);
     const sizeMin = (size * 0.2) / 2;
     const sizeVariation = activitiesOuterRadius - sizeMin;
@@ -70,7 +69,7 @@ export const Medalion: React.FC<IMedalionProps> = ({
     return () => {
       medalion.current && removeChildren(medalion.current);
     };
-  }, [medalion]);
+  }, [day, medalion]);
 
   return <div ref={medalion} className={"Medalion"}></div>;
 };

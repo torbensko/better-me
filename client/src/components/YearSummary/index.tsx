@@ -1,41 +1,27 @@
 import * as React from "react";
 import dayjs from "dayjs";
-import { random, times } from "lodash";
+import { groupBy, random, times } from "lodash";
 
 import "./styles.css";
 import { Medalion } from "../Medalion";
+import { IDay } from "../../types/IDay";
 
-export interface IYearSummaryProps {}
+export interface IYearSummaryProps {
+  days: IDay[];
+}
 
-export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
+export const YearSummary: React.FC<IYearSummaryProps> = ({ days }) => {
+  const months = groupBy(days, (d) => dayjs(d.date).month());
+
   return (
     <div className="YearSummary">
-      {times(12, (month) => {
-        const dayCount: number = dayjs().month(month).daysInMonth();
+      {Object.values(months).map((days) => {
         return (
           <div className="month">
-            {times(dayCount, (day) => (
+            {days.map((d) => (
               <div className="day">
-                <div className="dayNumber">{day}</div>
-                <Medalion
-                  size={20}
-                  rituals={[
-                    {
-                      name: "dry",
-                      complete: !!random(0, 1)
-                    },
-                    {
-                      name: "no-caffine",
-                      complete: !!random(0, 1)
-                    }
-                  ]}
-                  activities={[
-                    {
-                      name: "running",
-                      count: random(0, 3)
-                    }
-                  ]}
-                />
+                <div className="dayNumber">{dayjs(d.date).day()}</div>
+                <Medalion size={20} day={d} />
               </div>
             ))}
           </div>

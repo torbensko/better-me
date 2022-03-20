@@ -24,11 +24,8 @@ export const ToggleGroup: React.FC<IToggleGroupProps> = ({
     onChange && onChange(i);
   };
 
-  console.log("val", val);
-
   return (
     <div className="ToggleGroup">
-      <p>{val}</p>
       {times(count, (i) => (
         <Toggle
           key={i}

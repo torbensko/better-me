@@ -1,4 +1,5 @@
 import axios from "axios";
+import { mockActivitiesTypes } from "../mock-data/activityTypes";
 import { IActivityType } from "../types/IActivityType";
 import { IDay } from "../types/IDay";
 import { ISubscription } from "../types/ISubscription";
@@ -26,6 +27,7 @@ export class Services implements IServices {
     return data;
   }
   async fetchActivityTypes() {
+    return mockActivitiesTypes;
     const { data } = await axios.get(`activity-types`);
     return data.activityTypes;
   }

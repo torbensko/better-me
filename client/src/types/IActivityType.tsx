@@ -1,9 +1,9 @@
 import { TActivityType } from "./TActivityType";
 
 export interface IActivityType {
-  id: string;
+  id: number;
+  title: string;
   color: string;
-  label: string;
   type: TActivityType;
   maxCount?: number;
 }
