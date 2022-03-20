@@ -62,7 +62,8 @@ export const Medalion: React.FC<IMedalionProps> = ({ size = 30, day }) => {
       width: size,
       height: size,
       outerRadius: activitySize,
-      innerRadius: activitiesInnerRadius
+      innerRadius: activitiesInnerRadius,
+      stroke: "none"
     });
     medalion.current?.appendChild(activitiesSvg);
 

@@ -9,12 +9,10 @@ interface IAppProps {}
 
 export const App: React.FC<IAppProps> = () => {
   return (
-    <RequireSubscription>
-      <YearSummary />
-    </RequireSubscription>
+    <div className="App">
+      <RequireSubscription>
+        <YearSummary />
+      </RequireSubscription>
+    </div>
   );
-};
-
-export const AppDemo: React.FC = () => {
-  return <App />;
 };
