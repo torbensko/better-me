@@ -25,11 +25,15 @@ export const Medalion: React.FC<IMedalionProps> = ({ size = 30, day }) => {
     const activitiesOuterRadius = (size * 0.8) / 2;
     const activitiesInnerRadius = (size * 0) / 2;
 
-    const ritualData: IData[] = day.rituals.map((r) => ({
-      name: r.activity.title,
-      size: 1,
-      visible: r.timesPerformed > 0
-    }));
+    const ritualColors: string[] = [];
+    const ritualData: IData[] = day.rituals.map((r) => {
+      ritualColors.push(r.activity.color);
+      return {
+        name: r.activity.title,
+        size: 1,
+        visible: r.timesPerformed > 0
+      };
+    });
 
     const ritualsSvg = DonutChart(ritualData, {
       name: (d) => d.name,
@@ -37,16 +41,21 @@ export const Medalion: React.FC<IMedalionProps> = ({ size = 30, day }) => {
       width: size,
       height: size,
       outerRadius: ritualsOuterRadius,
-      innerRadius: ritualsInnerRadius
+      innerRadius: ritualsInnerRadius,
+      colors: ritualColors
     });
     medalion.current?.appendChild(ritualsSvg);
 
+    const activityColors: string[] = [];
     const activitiesData: IData[] = day.activities
       .filter((a) => a.timesPerformed > 0)
-      .map((a) => ({
-        name: a.activity.title,
-        size: a.timesPerformed
-      }));
+      .map((a) => {
+        activityColors.push(a.activity.color);
+        return {
+          name: a.activity.title,
+          size: a.timesPerformed
+        };
+      });
 
     if (activitiesData.length) {
       const maxActivities = 3;
@@ -66,7 +75,8 @@ export const Medalion: React.FC<IMedalionProps> = ({ size = 30, day }) => {
         height: size,
         outerRadius: activitySize,
         innerRadius: activitiesInnerRadius,
-        stroke: "none"
+        stroke: "none",
+        colors: activityColors
       });
       medalion.current?.appendChild(activitiesSvg);
     }
