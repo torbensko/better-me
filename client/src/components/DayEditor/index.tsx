@@ -28,19 +28,27 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
   useEffect(() => {
     // build a blank day
     const newDay: IDay = {
-      activities: (activities || []).map((a) => {
-        const activity: IActivityPerformed = {
-          activity: a,
-          timesPerformed: 0
+      activities: (activities || []).map((activity) => {
+        // find previous data
+        const priorActivity =
+          initDay?.activities.find((a) => a.activity.id === activity.id)
+            ?.timesPerformed || 0;
+        const performance: IActivityPerformed = {
+          activity: activity,
+          timesPerformed: priorActivity
         };
-        return activity;
+        return performance;
       }),
-      rituals: (rituals || []).map((a) => {
-        const activity: IActivityPerformed = {
-          activity: a,
-          timesPerformed: 0
+      rituals: (rituals || []).map((activity) => {
+        // find previous data
+        const priorActivity =
+          initDay?.activities.find((a) => a.activity.id === activity.id)
+            ?.timesPerformed || 0;
+        const performance: IActivityPerformed = {
+          activity: activity,
+          timesPerformed: priorActivity
         };
-        return activity;
+        return performance;
       }),
       date: initDay ? initDay.date : dayjs().toISOString()
     };

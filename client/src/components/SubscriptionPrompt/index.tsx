@@ -5,6 +5,7 @@ import { random, times } from "lodash";
 import { PinInput } from "react-input-pin-code";
 
 import { useApp } from "../../hooks/useApp";
+import { VStack } from "../VStack";
 
 type TMode = "load" | "create";
 
@@ -43,26 +44,28 @@ export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
 
   return (
     <div className="SubscriptionPrompt">
-      <ToggleButtonGroup
-        color="primary"
-        exclusive
-        value={mode}
-        onChange={(evt, value) => setMode(value)}
-      >
-        <ToggleButton value="load">Load</ToggleButton>
-        <ToggleButton value="create">Create</ToggleButton>
-      </ToggleButtonGroup>
-      <PinInput
-        values={pin}
-        type="text"
-        onChange={(value, index, values) => {
-          const upperPin = values.map((n) => n.toUpperCase());
-          setPin(upperPin);
-        }}
-      />
-      <Button variant="contained" onClick={setSubscription}>
-        Submit
-      </Button>
+      <VStack>
+        <ToggleButtonGroup
+          color="primary"
+          exclusive
+          value={mode}
+          onChange={(evt, value) => setMode(value)}
+        >
+          <ToggleButton value="load">Load</ToggleButton>
+          <ToggleButton value="create">Create</ToggleButton>
+        </ToggleButtonGroup>
+        <PinInput
+          values={pin}
+          type="text"
+          onChange={(value, index, values) => {
+            const upperPin = values.map((n) => n.toUpperCase());
+            setPin(upperPin);
+          }}
+        />
+        <Button variant="contained" onClick={setSubscription}>
+          Submit
+        </Button>
+      </VStack>
     </div>
   );
 };
