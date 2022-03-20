@@ -44,6 +44,33 @@ app.get("/subscriptions/:id/days", (req, res) => {
     });
 });
 
+app.post("/subscriptions", (req, res) => {
+  const body = req.body;
+  const idea = {
+    id: body.subscription
+  };
+
+  knex("subscription")
+    .insert(idea)
+    .then((ret) => {
+      Promise.all(
+        body.activities.map((a) => {
+          const activity = { ...a, subscription: body.subscription };
+          return knex("activity")
+            .insert(activity);
+        })
+      ).then(() => {
+        res.sendStatus(200);
+      })
+        .catch((err) => {
+          res.sendStatus(500);
+        })
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+    });
+});
+
 
 
 // need to ensure the folder exists

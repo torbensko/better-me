@@ -16,30 +16,34 @@ export interface IServices {
   ) => Promise<ISubscription>;
   fetchActivityTypes: (subscription: string) => Promise<IActivityType[]>;
   fetchDays: (subscription: string) => Promise<IDay[]>;
-  createDay: (day: IDay) => Promise<IDay>;
+  createDay: (subscription: string, day: IDay) => Promise<IDay>;
 }
 
 export class Services implements IServices {
   constructor() {
     axios.defaults.baseURL = serverUrl;
   }
-  async createSubscription(subcription: string, activities: IActivityType[]) {
+  async createSubscription(subscription: string, activities: IActivityType[]) {
     const { data } = await axios.post(`subscriptions`, {
-      data: { subcription, activities }
+      data: { subscription, activities }
     });
     return data;
   }
-  async fetchActivityTypes() {
+  async fetchActivityTypes(subscription: string) {
     // return mockActivitiesTypes;
-    const { data } = await axios.get(`activity-types`);
+    const { data } = await axios.get(
+      `subscriptions/${subscription}/activity-types`
+    );
     return data.activityTypes;
   }
   async fetchDays(subscription: string) {
     const { data } = await axios.get(`subscriptions/${subscription}/days`);
     return data.activityTypes;
   }
-  async createDay(day: IDay) {
-    const { data } = await axios.post(`day`, { data: { day } });
+  async createDay(subscription: string, day: IDay) {
+    const { data } = await axios.post(`subscriptions/${subscription}/days`, {
+      data: { day }
+    });
     return data;
   }
 }
