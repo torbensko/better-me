@@ -22,10 +22,10 @@ const rowToActivityPerformed = (row) => {
     performedAt: row.performedAt,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-    deletedAt: row.deletedAt,
-  }
+    deletedAt: row.deletedAt
+  };
   return idea;
-}
+};
 
 const rowToActivityType = (row) => {
   const activityType = {
@@ -39,11 +39,11 @@ const rowToActivityType = (row) => {
 
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-    deletedAt: row.deletedAt,
-  }
+    deletedAt: row.deletedAt
+  };
 
   return activityType;
-}
+};
 
 app.get("/ping", (req, res) => res.send("pong"));
 
@@ -58,6 +58,7 @@ app.get("/subscriptions/:id/days", (req, res) => {
       res.json({ days: rows.map(rowToActivityPerformed) });
     })
     .catch((err) => {
+      console.error(err);
       res.status(500);
     });
 });
@@ -72,6 +73,7 @@ app.get("/subscriptions/:id/activity-types", (req, res) => {
       res.json({ activityTypes: rows.map(rowToActivityType) });
     })
     .catch((err) => {
+      console.error(err);
       res.status(500);
     });
 });
@@ -88,24 +90,62 @@ app.post("/subscriptions", (req, res) => {
       Promise.all(
         body.activities.map((a) => {
           const activity = { ...a, subscription: body.subscription };
-          return knex("activity")
-            .insert(activity);
+          return knex("activity").insert(activity);
         })
-      ).then(() => {
-        res.sendStatus(200);
-      })
+      )
+        .then(() => {
+          res.sendStatus(200);
+        })
         .catch((err) => {
+          console.error(err);
           res.sendStatus(500);
-        })
+        });
     })
     .catch((err) => {
+      console.error(err);
       res.sendStatus(500);
     });
 });
 
+app.post("/subscriptions/:id/days", (req, res) => {
+  const body = req.body;
+  const date = body.date;
+  const subscription = req.params.id;
+  const performedActs = [...body.activities, ...body.rituals];
 
+  knex("activityPerformed")
+    .where({ subscription })
+    // .whereBetween("performedAt", [dayjs(date).startOf('day').toISOString(), dayjs(date).endOf('day').toISOString()])
+    .update({
+      deletedAt: dayjs().toISOString()
+    })
+    .then((ret) => {
+      Promise.all(
+        performedActs.map((a) => {
+          const activityPerformed = {
+            subscription,
+            activity: a.activity.id,
+            timesPerformed: a.timesPerformed,
+            performedAt: date
+          };
+          return knex("activityPerformed").insert(activityPerformed);
+        })
+      )
+        .then(() => {
+          res.sendStatus(200);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.sendStatus(500);
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+});
 
 // need to ensure the folder exists
-app.use(express.static('../client/build'));
+app.use(express.static("../client/build"));
 
 app.listen(port, () => console.log("Example app listening on port " + port));

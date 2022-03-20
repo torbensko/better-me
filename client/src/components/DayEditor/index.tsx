@@ -21,7 +21,7 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
   onSuccess
 }) => {
   const { activities, rituals } = useActivities();
-  const { services } = useApp();
+  const { services, subscription } = useApp();
 
   const [day, setDay] = useState<IDay>();
 
@@ -58,7 +58,8 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
   if (!day) return null;
 
   const saveDay = async () => {
-    const savedDay = await services.createDay(day);
+    if (!subscription) throw new Error("no subscription");
+    const savedDay = await services.createDay(subscription, day);
     onSuccess && onSuccess(savedDay);
   };
 

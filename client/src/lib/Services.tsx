@@ -42,9 +42,10 @@ export class Services implements IServices {
     return data.activityTypes;
   }
   async createDay(subscription: string, day: IDay) {
-    const { data } = await axios.post(`subscriptions/${subscription}/days`, {
+    const { data } = await axios.post(
+      `subscriptions/${subscription}/days`,
       day
-    });
+    );
     return data;
   }
 }

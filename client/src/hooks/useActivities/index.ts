@@ -33,8 +33,6 @@ export const useActivities = (): IUseActivities => {
     { refetchOnMount: false }
   );
 
-  console.log("activityTypes", activityTypes);
-
   return useMemo<IUseActivities>(
     () => ({
       activityTypes,

@@ -20,8 +20,11 @@ exports.up = function (knex, Promise) {
 
       return knex.schema.createTable("activityPerformed", function (table) {
         table.increments("id").primary();
+        table.string("subscription");
+        table.foreign('subscription').references('subscription.id');
         table.integer("activity");
         table.foreign('activity').references('activity.id');
+        table.integer("timesPerformed");
         table.timestamp("performedAt");
         table.timestamps(true, true, true);
         table.timestamp("deletedAt");
