@@ -57,6 +57,7 @@ export const ActivityEditor: React.FC<IActivityEditorProps> = ({
           label="Max count"
           // variant="outlined"
           size="medium"
+          defaultValue={1}
           disabled={type !== "activity"}
           onChange={(event) => setMaxCount(parseInt(event.target.value))}
         />

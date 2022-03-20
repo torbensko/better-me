@@ -25,7 +25,8 @@ export class Services implements IServices {
   }
   async createSubscription(subscription: string, activities: IActivityType[]) {
     const { data } = await axios.post(`subscriptions`, {
-      data: { subscription, activities }
+      subscription,
+      activities
     });
     return data;
   }
@@ -42,7 +43,7 @@ export class Services implements IServices {
   }
   async createDay(subscription: string, day: IDay) {
     const { data } = await axios.post(`subscriptions/${subscription}/days`, {
-      data: { day }
+      day
     });
     return data;
   }

@@ -60,9 +60,17 @@ export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
           <ToggleButton value="create">Create</ToggleButton>
         </ToggleButtonGroup>
         {mode === "load" ? (
-          <p>Enter your subscription pin</p>
+          <p style={{ textAlign: "center" }}>
+            Enter your subscription pin
+            <br />
+            <small>
+              Don't have one yet? Click <strong>create</strong> instead
+            </small>
+          </p>
         ) : (
-          <p>Your new subscription pin</p>
+          <p style={{ textAlign: "center" }}>
+            Your new subscription pin is <strong>{pin}</strong>
+          </p>
         )}
         <PinInput
           values={pin}
@@ -76,9 +84,9 @@ export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
           <div>
             <h2>Set your activities</h2>
             <p>
-              Rituals are things you want to stick to every day such as: no
+              Rituals are things you want to uphold every day such as: no
               drinking, no caffeine, positive mindset. Activities are things you
-              explicity undertake and includes things like: running, yoga, gym.
+              perform and includes things like: running, yoga, gym.
             </p>
             {[...activities, {}].map((a, i) => {
               const updateActivities = (activity: IActivityType) => {
