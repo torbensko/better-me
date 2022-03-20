@@ -23,10 +23,11 @@ export const useDays = (): IUseDays => {
     error,
     isLoading,
     refetch
-  } = useQuery<IDay[], Error>(
+  } = useQuery<IDay[] | undefined, Error>(
     "fetchDays",
     () => {
-      return services.fetchDays(subscription);
+      if (subscription) return services.fetchDays(subscription);
+      return undefined;
     },
     { refetchOnMount: false }
   );

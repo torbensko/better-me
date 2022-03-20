@@ -97,7 +97,9 @@ export function DonutChart(
     .join("path")
     .attr("fill", (d) => color(N[d.data.valueOf()]))
     .attr("display", (d) => (isVisible[d.data.valueOf()] ? null : "none"))
+    // @ts-ignore
     .attr("d", arc);
+
   // .append("title")
   // .text((d) => (title ? title(d.data.valueOf()) : "No title"));
   // svg
