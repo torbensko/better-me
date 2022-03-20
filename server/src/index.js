@@ -7,6 +7,7 @@ const dayjs = require("dayjs");
 const knexfile = require("../knexfile");
 const knex = require("knex")(knexfile);
 const cors = require("cors");
+const { keyBy } = require("lodash");
 
 const port = process.env.PORT || 3001;
 
@@ -15,17 +16,6 @@ app.use(cors());
 app.use(express.json());
 // for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-
-const rowToActivityPerformed = (row) => {
-  const idea = {
-    id: row.id,
-    performedAt: row.performedAt,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
-    deletedAt: row.deletedAt
-  };
-  return idea;
-};
 
 const rowToActivityType = (row) => {
   const activityType = {
@@ -45,22 +35,82 @@ const rowToActivityType = (row) => {
   return activityType;
 };
 
+const rowToActivityPerformed = (row) => {
+  const idea = {
+    id: row.id,
+    performedAt: row.performedAt,
+    activity: row.activity,
+    timesPerformed: row.timesPerformed,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    deletedAt: row.deletedAt
+  };
+  return idea;
+};
+
 app.get("/ping", (req, res) => res.send("pong"));
 
 app.get("/subscriptions/:id/days", (req, res) => {
   knex
     .select("*")
-    .from("activityPerformed")
+    .from("activity")
     .where({ subscription: req.params.id })
-    // .whereBetween("performedAt", [dayjs().toISOString(), dayjs().subtract(1, 'year').toISOString()])
     .whereNull("deletedAt")
     .then((rows) => {
-      res.json({ days: rows.map(rowToActivityPerformed) });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500);
+      const activityTypes = rows.map(rowToActivityType);
+      const activities = (activityTypes || []).filter(a => a.type === "activity");
+      const rituals = (activityTypes || []).filter(a => a.type === "ritual");
+
+      const days = [];
+      for (let m = 0; m < 12; m++) {
+        const dayCount = dayjs().month(m).daysInMonth();
+        for (let d = 0; d < dayCount; d++) {
+          days.push({
+            date: dayjs().date(d + 1).month(m).toISOString(),
+            activities: activities.map((a) => ({
+              activity: a,
+              timesPerformed: 0
+            })),
+            rituals: rituals.map((a) => ({
+              activity: a,
+              timesPerformed: 0
+            }))
+          });
+        }
+      }
+      const dayMap = keyBy(days, (d) => dayjs(d.date).format("YYYY-MM-DD"));
+
+      knex
+        .select("*")
+        .from("activityPerformed")
+        .where({ subscription: req.params.id })
+        .whereBetween("performedAt", [
+          dayjs().subtract(1, "year").startOf("day").toISOString(),
+          dayjs().endOf("day").toISOString()
+        ])
+        .whereNull("deletedAt")
+        .then((rows) => {
+          const performances = rows.map(rowToActivityPerformed);
+          // add to the days
+          performances.map(p => {
+            const key = dayjs(p.performedAt).format("YYYY-MM-DD");
+            const day = dayMap[key];
+            const peformance = day?.activities.find(a => a.activity.id === p.activity) || day?.rituals.find(a => a.activity.id === p.activity);
+            if (peformance) {
+              peformance.timesPerformed = p.timesPerformed;
+            }
+          });
+
+          res.json({ days: Object.values(dayMap) });
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500);
+        });
     });
+
+
+
 });
 
 app.get("/subscriptions/:id/activity-types", (req, res) => {
@@ -115,7 +165,7 @@ app.post("/subscriptions/:id/days", (req, res) => {
 
   knex("activityPerformed")
     .where({ subscription })
-    // .whereBetween("performedAt", [dayjs(date).startOf('day').toISOString(), dayjs(date).endOf('day').toISOString()])
+    .whereBetween("performedAt", [dayjs(date).startOf('day').toISOString(), dayjs(date).endOf('day').toISOString()])
     .update({
       deletedAt: dayjs().toISOString()
     })

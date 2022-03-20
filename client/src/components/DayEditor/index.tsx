@@ -10,6 +10,7 @@ import { IActivityPerformed } from "../../types/IActivityPerformed";
 import { ToggleGroup } from "../ToggleGroup";
 import { useApp } from "../../hooks/useApp";
 import { cloneDeep } from "lodash";
+import { useDays } from "../../hooks/useDays";
 
 export interface IDayEditorProps {
   initDay: IDay;
@@ -22,6 +23,7 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
 }) => {
   const { activities, rituals } = useActivities();
   const { services, subscription } = useApp();
+  const { refetch } = useDays();
 
   const [day, setDay] = useState<IDay>();
 
@@ -60,6 +62,8 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
   const saveDay = async () => {
     if (!subscription) throw new Error("no subscription");
     const savedDay = await services.createDay(subscription, day);
+    // refetch the days
+    refetch();
     onSuccess && onSuccess(savedDay);
   };
 

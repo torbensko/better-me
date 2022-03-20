@@ -12,7 +12,10 @@ for (let m = 0; m < 12; m++) {
   const dayCount: number = dayjs().month(m).daysInMonth();
   for (let d = 0; d < dayCount; d++) {
     mockDays.push({
-      date: dayjs().day(d).month(m).toISOString(),
+      date: dayjs()
+        .date(d + 1)
+        .month(m)
+        .toISOString(),
       activities: mockActivities.map((a) => ({
         activity: a,
         timesPerformed: random(a.maxCount || 1)
@@ -24,5 +27,3 @@ for (let m = 0; m < 12; m++) {
     });
   }
 }
-
-console.log("mockDays", mockDays);
