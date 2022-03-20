@@ -1,5 +1,8 @@
-.SubscriptionPrompt {
+/* .SubscriptionPrompt {
+} */
+
+/* HACK add to VStack */
+.SubscriptionPrompt .VStack .container {
   display: flex;
   justify-content: center;
-  align-items: center;
 }

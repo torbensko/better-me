@@ -10,7 +10,10 @@ export const serverUrl: string = process.env.REACT_APP_SERVICES_URL as string;
  * Simple class for talking to the services.
  */
 export interface IServices {
-  createSubscription: (subscription: string) => Promise<ISubscription>;
+  createSubscription: (
+    subscription: string,
+    activities: IActivityType[]
+  ) => Promise<ISubscription>;
   fetchActivityTypes: (subscription: string) => Promise<IActivityType[]>;
   fetchDays: (subscription: string) => Promise<IDay[]>;
   createDay: (day: IDay) => Promise<IDay>;
@@ -20,14 +23,14 @@ export class Services implements IServices {
   constructor() {
     axios.defaults.baseURL = serverUrl;
   }
-  async createSubscription(subcription: string) {
+  async createSubscription(subcription: string, activities: IActivityType[]) {
     const { data } = await axios.post(`subscriptions`, {
-      data: { subcription }
+      data: { subcription, activities }
     });
     return data;
   }
   async fetchActivityTypes() {
-    return mockActivitiesTypes;
+    // return mockActivitiesTypes;
     const { data } = await axios.get(`activity-types`);
     return data.activityTypes;
   }

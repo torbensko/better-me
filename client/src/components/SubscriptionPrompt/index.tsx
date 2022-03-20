@@ -6,6 +6,10 @@ import { PinInput } from "react-input-pin-code";
 
 import { useApp } from "../../hooks/useApp";
 import { VStack } from "../VStack";
+import { IActivityType } from "../../types/IActivityType";
+import { ActivityEditor } from "../ActivityEditor";
+
+import "./styles.css";
 
 type TMode = "load" | "create";
 
@@ -23,12 +27,13 @@ export interface ISubscriptionPromptProps {}
 export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
   const { services } = useApp();
   const [mode, setMode] = useState<TMode>("load");
+  const [activities, setActivities] = useState<IActivityType[]>([]);
 
   const setSubscription = async () => {
     const code = pin.join("");
     if (!code.match(/\w{4}/)) return;
     if (mode === "create") {
-      await services.createSubscription(code);
+      await services.createSubscription(code, activities);
     }
     // redirect to new code
     var url = new URL(window.location.href);
@@ -54,6 +59,11 @@ export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
           <ToggleButton value="load">Load</ToggleButton>
           <ToggleButton value="create">Create</ToggleButton>
         </ToggleButtonGroup>
+        {mode === "load" ? (
+          <p>Enter your subscription pin</p>
+        ) : (
+          <p>Your new subscription pin</p>
+        )}
         <PinInput
           values={pin}
           type="text"
@@ -62,8 +72,31 @@ export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
             setPin(upperPin);
           }}
         />
+        {mode === "create" && (
+          <div>
+            <h2>Set your activities</h2>
+            <p>
+              Rituals are things you want to stick to every day such as: no
+              drinking, no caffeine, positive mindset. Activities are things you
+              explicity undertake and includes things like: running, yoga, gym.
+            </p>
+            {[...activities, {}].map((a, i) => {
+              const updateActivities = (activity: IActivityType) => {
+                const newActivities = [...activities];
+                newActivities[i] = activity;
+                setActivities(newActivities);
+              };
+              return <ActivityEditor onChange={updateActivities} />;
+            })}
+            <p style={{ textAlign: "center" }}>
+              <small>
+                You cannot edit these yet so... you know... don't screw them up
+              </small>
+            </p>
+          </div>
+        )}
         <Button variant="contained" onClick={setSubscription}>
-          Submit
+          {mode === "load" ? "Load" : "Create"}
         </Button>
       </VStack>
     </div>
