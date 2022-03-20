@@ -17,20 +17,23 @@ interface IUseActivities {
  * Hook handling fetching of anatomy articles
  */
 export const useActivities = (): IUseActivities => {
-  const { services } = useApp();
+  const { subscription, services } = useApp();
 
   const {
     data: activityTypes,
     error,
     isLoading,
     refetch
-  } = useQuery<IActivityType[], Error>(
+  } = useQuery<IActivityType[] | undefined, Error>(
     "fetchActivityTypes",
     () => {
-      return services.fetchActivityTypes();
+      if (subscription) return services.fetchActivityTypes(subscription);
+      return undefined;
     },
     { refetchOnMount: false }
   );
+
+  console.log("activityTypes", activityTypes);
 
   return useMemo<IUseActivities>(
     () => ({

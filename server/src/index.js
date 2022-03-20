@@ -16,7 +16,7 @@ app.use(express.json());
 // for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-const rowToDay = (row) => {
+const rowToActivityPerformed = (row) => {
   const idea = {
     id: row.id,
     performedAt: row.performedAt,
@@ -25,6 +25,24 @@ const rowToDay = (row) => {
     deletedAt: row.deletedAt,
   }
   return idea;
+}
+
+const rowToActivityType = (row) => {
+  const activityType = {
+    id: row.id,
+
+    title: row.title,
+    subscription: row.subscription,
+    color: row.color,
+    type: row.type,
+    maxCount: row.maxCount,
+
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    deletedAt: row.deletedAt,
+  }
+
+  return activityType;
 }
 
 app.get("/ping", (req, res) => res.send("pong"));
@@ -37,7 +55,21 @@ app.get("/subscriptions/:id/days", (req, res) => {
     // .whereBetween("performedAt", [dayjs().toISOString(), dayjs().subtract(1, 'year').toISOString()])
     .whereNull("deletedAt")
     .then((rows) => {
-      res.json({ days: rows.map(rowToDay) });
+      res.json({ days: rows.map(rowToActivityPerformed) });
+    })
+    .catch((err) => {
+      res.status(500);
+    });
+});
+
+app.get("/subscriptions/:id/activity-types", (req, res) => {
+  knex
+    .select("*")
+    .from("activity")
+    .where({ subscription: req.params.id })
+    .whereNull("deletedAt")
+    .then((rows) => {
+      res.json({ activityTypes: rows.map(rowToActivityType) });
     })
     .catch((err) => {
       res.status(500);
