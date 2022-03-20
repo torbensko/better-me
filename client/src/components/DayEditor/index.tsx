@@ -1,13 +1,15 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
+import { Button } from "@mui/material";
+import dayjs from "dayjs";
+
 import { useActivities } from "../../hooks/useActivities";
 import { Toggle } from "../Toggle";
 import { IDay } from "../../types/IDay";
 import { IActivityPerformed } from "../../types/IActivityPerformed";
-import dayjs from "dayjs";
-import { useMemo } from "react";
 import { ToggleGroup } from "../ToggleGroup";
-import { Button } from "@mui/material";
 import { useApp } from "../../hooks/useApp";
+import { cloneDeep } from "lodash";
 
 export interface IDayEditorProps {
   initDay: IDay;
@@ -21,7 +23,10 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
   const { activities, rituals } = useActivities();
   const { services } = useApp();
 
-  const day = useMemo(() => {
+  const [day, setDay] = useState<IDay>();
+
+  useEffect(() => {
+    // build a blank day
     const newDay: IDay = {
       activities: (activities || []).map((a) => {
         const activity: IActivityPerformed = {
@@ -39,8 +44,10 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
       }),
       date: initDay ? initDay.date : dayjs().toISOString()
     };
-    return newDay;
+    setDay(newDay);
   }, [activities, rituals]);
+
+  if (!day) return null;
 
   const saveDay = async () => {
     const savedDay = await services.createDay(day);
@@ -49,41 +56,51 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
 
   return (
     <div>
+      <h1>{dayjs(day.date).format("DD MMM YYYY")}</h1>
       <h2>Rituals</h2>
-      {day.rituals.map((ritual, i) => {
-        const newCount = i + 1;
-        const onClick = () => {
-          ritual.timesPerformed =
-            ritual.timesPerformed === newCount ? 0 : newCount;
+      {day.rituals.map((performance, i) => {
+        const onClick = (value: boolean) => {
+          const dayUpdate = cloneDeep(day);
+          const updatedPerformance = dayUpdate.rituals.find(
+            (r) => r.activity.id === performance.activity.id
+          );
+          if (updatedPerformance)
+            updatedPerformance.timesPerformed = value ? 1 : 0;
+          setDay(dayUpdate);
         };
         return (
           <Toggle
-            key={ritual.activity.id}
-            label={ritual.activity.title}
+            key={performance.activity.id}
+            label={performance.activity.title}
             onChange={onClick}
-            value={ritual.timesPerformed > 0}
+            value={performance.timesPerformed > 0}
           />
         );
       })}
       <h2>Activities</h2>
-      {day.activities.map((performances, i) => {
-        const newCount = i + 1;
-        const onClick = () => {
-          performances.timesPerformed =
-            performances.timesPerformed === newCount ? 0 : newCount;
+      {day.activities.map((performance, i) => {
+        const onClick = (value: number) => {
+          const dayUpdate = cloneDeep(day);
+          const updatedPerformance = dayUpdate.activities.find(
+            (a) => a.activity.id === performance.activity.id
+          );
+          if (updatedPerformance) updatedPerformance.timesPerformed = value;
+          setDay(dayUpdate);
         };
         return (
           <>
-            <h4>{performances.activity.title}</h4>
+            <h4>{performance.activity.title}</h4>
             <ToggleGroup
-              key={performances.activity.id}
+              key={performance.activity.id}
               onChange={onClick}
-              count={performances.activity.maxCount || 1}
+              value={performance.timesPerformed}
+              count={performance.activity.maxCount || 1}
             />
           </>
         );
       })}
-      <Button variant="contained" onClick={saveDay}>
+      <br />
+      <Button variant="contained" fullWidth={true} onClick={saveDay}>
         Submit
       </Button>
     </div>

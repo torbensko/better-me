@@ -6,21 +6,22 @@ import { Toggle } from "../Toggle";
 import "./styles.css";
 export interface IToggleGroupProps {
   count: number;
+  value: number;
   onChange: (value: number) => unknown;
 }
 
 export const ToggleGroup: React.FC<IToggleGroupProps> = ({
   count,
+  value,
   onChange
 }) => {
-  const [val, setVal] = useState<number>(0);
+  // const [val, setVal] = useState<number>(0);
 
   const onToggleClick = (i: number) => {
     // toggle off if clicking the same value again
-    if (i === val) {
+    if (i === value) {
       i = 0;
     }
-    setVal(i);
     onChange && onChange(i);
   };
 
@@ -31,7 +32,7 @@ export const ToggleGroup: React.FC<IToggleGroupProps> = ({
           key={i}
           onChange={() => onToggleClick(i + 1)}
           label={`${i + 1}`}
-          value={val > i}
+          value={value > i}
         />
       ))}
     </div>

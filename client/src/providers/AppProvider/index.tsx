@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import { Services } from "../../lib/Services";
+import "./styles.css";
 
 const PARAM_SUBSCRIPTION = "key";
 
