@@ -3,6 +3,7 @@
   flex-direction: row;
   justify-content: space-between;
   max-width: 360px;
+  margin: 0 auto;
 }
 /* 
 .YearSummary .month {

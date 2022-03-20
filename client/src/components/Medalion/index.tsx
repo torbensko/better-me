@@ -41,31 +41,35 @@ export const Medalion: React.FC<IMedalionProps> = ({ size = 30, day }) => {
     });
     medalion.current?.appendChild(ritualsSvg);
 
-    const activitiesData: IData[] = day.activities.map((a) => ({
-      name: a.activity.title,
-      size: a.timesPerformed
-    }));
+    const activitiesData: IData[] = day.activities
+      .filter((a) => a.timesPerformed > 0)
+      .map((a) => ({
+        name: a.activity.title,
+        size: a.timesPerformed
+      }));
 
-    const maxActivities = 3;
-    const activityCount = day.activities.reduce(
-      (total, x) => x.timesPerformed + total,
-      0
-    );
-    const sizeScale = activityCount / Math.max(activityCount, maxActivities);
-    const sizeMin = (size * 0.2) / 2;
-    const sizeVariation = activitiesOuterRadius - sizeMin;
-    const activitySize = sizeMin + sizeVariation * sizeScale;
+    if (activitiesData.length) {
+      const maxActivities = 3;
+      const activityCount = day.activities.reduce(
+        (total, x) => x.timesPerformed + total,
+        0
+      );
+      const sizeScale = activityCount / Math.max(activityCount, maxActivities);
+      const sizeMin = (size * 0.2) / 2;
+      const sizeVariation = activitiesOuterRadius - sizeMin;
+      const activitySize = sizeMin + sizeVariation * sizeScale;
 
-    const activitiesSvg = DonutChart(activitiesData, {
-      name: (d) => d.name,
-      value: (d) => d.size,
-      width: size,
-      height: size,
-      outerRadius: activitySize,
-      innerRadius: activitiesInnerRadius,
-      stroke: "none"
-    });
-    medalion.current?.appendChild(activitiesSvg);
+      const activitiesSvg = DonutChart(activitiesData, {
+        name: (d) => d.name,
+        value: (d) => d.size,
+        width: size,
+        height: size,
+        outerRadius: activitySize,
+        innerRadius: activitiesInnerRadius,
+        stroke: "none"
+      });
+      medalion.current?.appendChild(activitiesSvg);
+    }
 
     return () => {
       medalion.current && removeChildren(medalion.current);

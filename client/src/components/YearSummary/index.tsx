@@ -39,9 +39,15 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
             <div className="month">
               {days.map((d) => {
                 const onClick = () => setEditDate(d);
+                const activityCount = d.activities.reduce(
+                  (total, x) => x.timesPerformed + total,
+                  0
+                );
                 return (
                   <div className="day" onClick={onClick}>
-                    <div className="dayNumber">{dayjs(d.date).date()}</div>
+                    {activityCount === 0 && (
+                      <div className="dayNumber">{dayjs(d.date).date()}</div>
+                    )}
                     <Medalion size={20} day={d} />
                   </div>
                 );
