@@ -11,6 +11,7 @@ import { ToggleGroup } from "../ToggleGroup";
 import { useApp } from "../../hooks/useApp";
 import { cloneDeep } from "lodash";
 import { useDays } from "../../hooks/useDays";
+import { HStack } from "../HStack";
 
 export interface IDayEditorProps {
   initDay: IDay;
@@ -71,25 +72,27 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
     <div>
       <h1>{dayjs(day.date).format("DD MMM YYYY")}</h1>
       <h2>Rituals</h2>
-      {day.rituals.map((performance, i) => {
-        const onClick = (value: boolean) => {
-          const dayUpdate = cloneDeep(day);
-          const updatedPerformance = dayUpdate.rituals.find(
-            (r) => r.activity.id === performance.activity.id
+      <HStack>
+        {day.rituals.map((performance, i) => {
+          const onClick = (value: boolean) => {
+            const dayUpdate = cloneDeep(day);
+            const updatedPerformance = dayUpdate.rituals.find(
+              (r) => r.activity.id === performance.activity.id
+            );
+            if (updatedPerformance)
+              updatedPerformance.timesPerformed = value ? 1 : 0;
+            setDay(dayUpdate);
+          };
+          return (
+            <Toggle
+              key={performance.activity.id}
+              label={performance.activity.title}
+              onChange={onClick}
+              value={performance.timesPerformed > 0}
+            />
           );
-          if (updatedPerformance)
-            updatedPerformance.timesPerformed = value ? 1 : 0;
-          setDay(dayUpdate);
-        };
-        return (
-          <Toggle
-            key={performance.activity.id}
-            label={performance.activity.title}
-            onChange={onClick}
-            value={performance.timesPerformed > 0}
-          />
-        );
-      })}
+        })}
+      </HStack>
       <h2>Activities</h2>
       {day.activities.map((performance, i) => {
         const onClick = (value: number) => {
@@ -101,7 +104,7 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
           setDay(dayUpdate);
         };
         return (
-          <>
+          <HStack>
             <h4>{performance.activity.title}</h4>
             <ToggleGroup
               key={performance.activity.id}
@@ -109,7 +112,7 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
               value={performance.timesPerformed}
               count={performance.activity.maxCount || 1}
             />
-          </>
+          </HStack>
         );
       })}
       <br />
