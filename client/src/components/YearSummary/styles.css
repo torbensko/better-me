@@ -4,6 +4,8 @@
   justify-content: space-between;
   max-width: 360px;
   margin: 0 auto;
+  /* padding for the stats */
+  padding-bottom: 40px;
 }
 /* 
 .YearSummary .month {
@@ -42,4 +44,12 @@
 }
 .YearSummary .day.-weekend .dayNumber {
   background-color: #eee;
+}
+
+.YearSummary .stats {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }

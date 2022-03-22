@@ -11,6 +11,7 @@ import { DayEditor } from "../DayEditor";
 import { Box, Modal } from "@mui/material";
 import { CSSProperties } from "@emotion/serialize";
 import { useDays } from "../../hooks/useDays";
+import { YearStats } from "../YearStats";
 
 const style = {
   position: "absolute",
@@ -65,6 +66,9 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
             </div>
           );
         })}
+        <div className="stats">
+          <YearStats />
+        </div>
       </div>
       <Modal
         open={!!editdate}
