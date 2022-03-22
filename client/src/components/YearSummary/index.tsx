@@ -1,5 +1,6 @@
 import * as React from "react";
 import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
 import { groupBy, orderBy } from "lodash";
 
 import "./styles.css";
@@ -23,6 +24,8 @@ const style = {
   p: 4
 };
 
+dayjs.extend(isToday);
+
 export interface IYearSummaryProps {}
 
 export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
@@ -43,8 +46,15 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
                   (total, x) => x.timesPerformed + total,
                   0
                 );
+                const className = ["day"];
+                const date = dayjs(d.date);
+                const dayOfWeek = date.day();
+                if (dayOfWeek === 0 || dayOfWeek === 6)
+                  className.push("-weekend");
+                if (date.isToday()) className.push("-today");
+
                 return (
-                  <div className="day" onClick={onClick}>
+                  <div className={className.join(" ")} onClick={onClick}>
                     {activityCount === 0 && (
                       <div className="dayNumber">{dayjs(d.date).date()}</div>
                     )}

@@ -35,4 +35,11 @@
   width: 100%;
   height: 100%;
   font-size: 6pt;
+  box-sizing: content-box;
+}
+.YearSummary .day.-today .dayNumber {
+  border: 1px solid rgba(255,0,0,.5);
+}
+.YearSummary .day.-weekend .dayNumber {
+  background-color: #eee;
 }
