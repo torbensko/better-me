@@ -25,20 +25,21 @@ const generateRandomPin = (): string[] => {
 export interface ISubscriptionPromptProps {}
 
 export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
-  const { services } = useApp();
+  const { services, setSubscription } = useApp();
   const [mode, setMode] = useState<TMode>("load");
   const [activities, setActivities] = useState<IActivityType[]>([]);
 
-  const setSubscription = async () => {
+  const handleSubscription = async () => {
     const code = pin.join("");
     if (!code.match(/\w{4}/)) return;
     if (mode === "create") {
       await services.createSubscription(code, activities);
     }
     // redirect to new code
-    var url = new URL(window.location.href);
-    url.searchParams.append("key", code);
-    window.location.href = url.href;
+    // var url = new URL(window.location.href);
+    // url.searchParams.append("key", code);
+    // window.location.href = url.href;
+    setSubscription(code);
   };
 
   const [pin, setPin] = useState<string[]>(BLANK_PIN);
@@ -103,7 +104,7 @@ export const SubscriptionPrompt: React.FC<ISubscriptionPromptProps> = ({}) => {
             </p>
           </div>
         )}
-        <Button variant="contained" onClick={setSubscription}>
+        <Button variant="contained" onClick={handleSubscription}>
           {mode === "load" ? "Load" : "Create"}
         </Button>
       </VStack>

@@ -5,7 +5,7 @@
   max-width: 360px;
   margin: 0 auto;
   /* padding for the stats */
-  padding-bottom: 40px;
+  padding-bottom: 10px;
 }
 /* 
 .YearSummary .month {
@@ -46,7 +46,11 @@
   background-color: #eee;
 }
 
-.YearSummary .stats {
+.Details {
+  text-align: center;
+}
+
+.Stats {
   position: fixed;
   bottom: 0;
   left: 0;

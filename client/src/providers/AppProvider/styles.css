@@ -3,3 +3,7 @@
 body {
   font-family: 'Bai Jamjuree', sans-serif;
 }
+a {
+  color: rgb(80, 173, 196);
+  cursor: pointer;
+}

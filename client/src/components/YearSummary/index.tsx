@@ -12,6 +12,7 @@ import { Box, Modal } from "@mui/material";
 import { CSSProperties } from "@emotion/serialize";
 import { useDays } from "../../hooks/useDays";
 import { YearStats } from "../YearStats";
+import { useApp } from "../../hooks/useApp";
 
 const style = {
   position: "absolute",
@@ -30,6 +31,7 @@ dayjs.extend(isToday);
 export interface IYearSummaryProps {}
 
 export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
+  const { subscription, setSubscription } = useApp();
   const { days } = useDays();
   const months = groupBy(days, (d) => dayjs(d.date).month());
   const [editdate, setEditDate] = useState<IDay>();
@@ -66,10 +68,22 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
             </div>
           );
         })}
-        <div className="stats">
-          <YearStats />
-        </div>
       </div>
+      {!!subscription && (
+        <>
+          <div className="Details">
+            Subscription: {subscription}
+            <br />
+            <small>
+              <a onClick={() => setSubscription("")}>Close</a>
+            </small>
+          </div>
+          <div className="Stats">
+            <YearStats />
+          </div>
+        </>
+      )}
+      <div style={{ height: "40px" }}></div>
       <Modal
         open={!!editdate}
         onClose={() => setEditDate(undefined)}

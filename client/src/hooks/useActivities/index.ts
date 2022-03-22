@@ -25,7 +25,7 @@ export const useActivities = (): IUseActivities => {
     isLoading,
     refetch
   } = useQuery<IActivityType[] | undefined, Error>(
-    "fetchActivityTypes",
+    ["fetchActivityTypes", subscription],
     () => {
       if (subscription) return services.fetchActivityTypes(subscription);
       return undefined;
