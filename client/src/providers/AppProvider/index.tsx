@@ -1,5 +1,5 @@
 import * as React from "react";
-import { parseUrl } from "query-string";
+
 import { useEffect, useMemo, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
