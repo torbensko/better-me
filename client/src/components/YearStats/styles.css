@@ -5,6 +5,7 @@
   background: rgba(255,255,255,0.8);
   text-align: center;
   display: inline-block;
+  font-size: 70%;
 }
 .YearStats ul {
   list-style: none;
