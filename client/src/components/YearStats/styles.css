@@ -9,6 +9,7 @@
 .YearStats ul {
   list-style: none;
   margin: 0;
+  padding: 0;
 }
 .YearStats ul li {
   display: inline-block;
