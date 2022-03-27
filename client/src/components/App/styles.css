@@ -29,6 +29,7 @@ h3 {
 a {
   color: rgb(80, 173, 196);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .App {
