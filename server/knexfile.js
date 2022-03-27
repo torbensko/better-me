@@ -12,7 +12,7 @@ module.exports = {
     database: parts[5],
     charset: "utf8",
     pool: { min: 0, max: 50 },
-    // ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false }
   },
   migrations: {
     extension: "js",
