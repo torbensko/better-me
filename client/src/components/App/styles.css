@@ -6,6 +6,15 @@ body, div[class^="rsg--preview-"] {
   color: #fff;
 }
 
+body {
+  padding: 0;
+}
+
+a {
+  color: rgb(80, 173, 196);
+  cursor: pointer;
+}
+
 .App {
   /* max-width: 400px; */
   margin: 0 auto;
