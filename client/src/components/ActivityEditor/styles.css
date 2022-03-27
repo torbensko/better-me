@@ -3,6 +3,16 @@
   flex-direction: row;
   align-items: center;
 }
+
+/* HACK override of the twitter plugin */
 .twitter-picker {
   box-shadow: none !important;
+  background: none !important;
+}
+.twitter-picker > div {
+  display: none;
+}
+.twitter-picker > div:last-child {
+  padding: 0 !important;
+  display: block;
 }
