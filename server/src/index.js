@@ -58,15 +58,20 @@ app.get("/subscriptions/:id/days", (req, res) => {
     .whereNull("deletedAt")
     .then((rows) => {
       const activityTypes = rows.map(rowToActivityType);
-      const activities = (activityTypes || []).filter(a => a.type === "activity");
-      const rituals = (activityTypes || []).filter(a => a.type === "ritual");
+      const activities = (activityTypes || []).filter(
+        (a) => a.type === "activity"
+      );
+      const rituals = (activityTypes || []).filter((a) => a.type === "ritual");
 
       const days = [];
       for (let m = 0; m < 12; m++) {
         const dayCount = dayjs().month(m).daysInMonth();
         for (let d = 0; d < dayCount; d++) {
           days.push({
-            date: dayjs().date(d + 1).month(m).toISOString(),
+            date: dayjs()
+              .date(d + 1)
+              .month(m)
+              .format("YYYY-MM-DD"),
             activities: activities.map((a) => ({
               activity: a,
               timesPerformed: 0
@@ -85,17 +90,19 @@ app.get("/subscriptions/:id/days", (req, res) => {
         .from("activityPerformed")
         .where({ subscription: req.params.id })
         .whereBetween("performedAt", [
-          dayjs().subtract(1, "year").startOf("day").toISOString(),
-          dayjs().endOf("day").toISOString()
+          dayjs().subtract(1, "year").startOf("day").format("YYYY-MM-DD"),
+          dayjs().endOf("day").format("YYYY-MM-DD")
         ])
         .whereNull("deletedAt")
         .then((rows) => {
           const performances = rows.map(rowToActivityPerformed);
           // add to the days
-          performances.map(p => {
+          performances.map((p) => {
             const key = dayjs(p.performedAt).format("YYYY-MM-DD");
             const day = dayMap[key];
-            const peformance = day?.activities.find(a => a.activity.id === p.activity) || day?.rituals.find(a => a.activity.id === p.activity);
+            const peformance =
+              day?.activities.find((a) => a.activity.id === p.activity) ||
+              day?.rituals.find((a) => a.activity.id === p.activity);
             if (peformance) {
               peformance.timesPerformed = p.timesPerformed;
             }
@@ -108,9 +115,6 @@ app.get("/subscriptions/:id/days", (req, res) => {
           res.status(500);
         });
     });
-
-
-
 });
 
 app.get("/subscriptions/:id/activity-types", (req, res) => {
@@ -165,7 +169,10 @@ app.post("/subscriptions/:id/days", (req, res) => {
 
   knex("activityPerformed")
     .where({ subscription })
-    .whereBetween("performedAt", [dayjs(date).startOf('day').toISOString(), dayjs(date).endOf('day').toISOString()])
+    .whereBetween("performedAt", [
+      dayjs(date).startOf("day").format("YYYY-MM-DD"),
+      dayjs(date).endOf("day").format("YYYY-MM-DD")
+    ])
     .update({
       deletedAt: dayjs().toISOString()
     })

@@ -25,7 +25,7 @@ exports.up = function (knex, Promise) {
         table.integer("activity");
         table.foreign('activity').references('activity.id');
         table.integer("timesPerformed");
-        table.timestamp("performedAt");
+        table.date("performedAt");
         table.timestamps(true, true, true);
         table.timestamp("deletedAt");
       });

@@ -21,6 +21,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.YearSummary .day:hover {
+  background: rgba(255,255,255,0.5);
 }
 .YearSummary .day > div {
   position: relative;
@@ -40,8 +45,8 @@
   font-size: 6pt;
   box-sizing: content-box;
 }
-.YearSummary .day.-today .dayNumber {
-  border: 1px solid rgba(255,0,0,.5);
+.YearSummary .day.-today {
+  border: 2px solid rgba(255,0,0,.5);
 }
 .YearSummary .day.-weekend .dayNumber {
   background-color: rgba(255,255,255,0.2);

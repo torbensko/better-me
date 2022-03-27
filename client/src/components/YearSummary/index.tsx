@@ -33,14 +33,14 @@ export interface IYearSummaryProps {}
 export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
   const { subscription, setSubscription } = useApp();
   const { days } = useDays();
-  const months = groupBy(days, (d) => dayjs(d.date).month());
+  const months = groupBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").month());
   const [editdate, setEditDate] = useState<IDay>();
 
   return (
     <>
       <div className="YearSummary">
         {Object.values(months).map((days) => {
-          days = orderBy(days, (d) => dayjs(d.date).date());
+          days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
           return (
             <div className="month">
               {days.map((d) => {
@@ -50,7 +50,7 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
                   0
                 );
                 const className = ["day"];
-                const date = dayjs(d.date);
+                const date = dayjs(d.date, "YYYY-MM-DD");
                 const dayOfWeek = date.day();
                 if (dayOfWeek === 0 || dayOfWeek === 6)
                   className.push("-weekend");
@@ -59,7 +59,9 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
                 return (
                   <div className={className.join(" ")} onClick={onClick}>
                     {activityCount === 0 && (
-                      <div className="dayNumber">{dayjs(d.date).date()}</div>
+                      <div className="dayNumber">
+                        {dayjs(d.date, "YYYY-MM-DD").date()}
+                      </div>
                     )}
                     <Medalion size={20} day={d} />
                   </div>

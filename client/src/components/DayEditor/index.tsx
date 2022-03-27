@@ -70,7 +70,10 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
 
   return (
     <div>
-      <h1>{dayjs(day.date).format("DD MMM YYYY")}</h1>
+      <h1 style={{ textAlign: "center" }}>
+        {dayjs(day.date).format("dddd")},{" "}
+        {dayjs(day.date).format("DD MMM YYYY")}
+      </h1>
       <h2>Rituals</h2>
       <HStack>
         {day.rituals.map((performance, i) => {
@@ -106,12 +109,14 @@ export const DayEditor: React.FC<IDayEditorProps> = ({
         return (
           <HStack>
             <h4>{performance.activity.title}</h4>
-            <ToggleGroup
-              key={performance.activity.id}
-              onChange={onClick}
-              value={performance.timesPerformed}
-              count={performance.activity.maxCount || 1}
-            />
+            <div style={{ textAlign: "right" }}>
+              <ToggleGroup
+                key={performance.activity.id}
+                onChange={onClick}
+                value={performance.timesPerformed}
+                count={performance.activity.maxCount || 1}
+              />
+            </div>
           </HStack>
         );
       })}
