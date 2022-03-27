@@ -1,22 +1,23 @@
 .YearSummary {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  max-width: 360px;
+  justify-content: center;
+  /* max-width: 360px; */
   margin: 0 auto;
   /* padding for the stats */
   padding-bottom: 10px;
+  text-align: center;
 }
 /* 
 .YearSummary .month {
-} 
+}  
 */
 .YearSummary .day {
   position: relative;
   /* HACK should match the visualisation */
   width: 20px;
   height: 20px;
-  margin: 5px;
+  margin: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,7 +29,7 @@
 }
 .YearSummary .day .dayNumber {
   position: absolute;
-  border: 0.5px solid rgba(0,0,0,0.25);
+  border: 0.5px solid rgba(255,255,255,0.25);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -43,7 +44,7 @@
   border: 1px solid rgba(255,0,0,.5);
 }
 .YearSummary .day.-weekend .dayNumber {
-  background-color: #eee;
+  background-color: rgba(255,255,255,0.2);
 }
 
 .Details {

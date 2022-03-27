@@ -1,7 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@200&display=swap');
 
-.App {
+body, div[class^="rsg--preview-"] {
   font-family: 'Bai Jamjuree', sans-serif;
+  background: black;
+  color: #fff;
+}
+
+.App {
   /* max-width: 400px; */
   margin: 0 auto;
   padding: 15px 10px;

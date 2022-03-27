@@ -1,3 +1,4 @@
+import { createTheme, ThemeProvider } from "@mui/material";
 import * as React from "react";
 
 import { useEffect, useMemo, useState } from "react";
@@ -60,9 +61,19 @@ export const AppProvider: React.FC<IAppProviderProps> = ({ children }) => {
     };
   }, [subscription]);
 
+  const theme = createTheme({
+    palette: {
+      mode: "dark"
+    }
+  });
+
   return (
-    <AppContext.Provider value={value}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </AppContext.Provider>
+    <ThemeProvider theme={theme}>
+      <AppContext.Provider value={value}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </AppContext.Provider>
+    </ThemeProvider>
   );
 };
