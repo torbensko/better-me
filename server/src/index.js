@@ -66,11 +66,12 @@ app.get("/subscriptions/:id/days", (req, res) => {
       const days = [];
       for (let m = 0; m < 12; m++) {
         const dayCount = dayjs().month(m).daysInMonth();
+        console.log(dayCount);
         for (let d = 0; d < dayCount; d++) {
           days.push({
             date: dayjs()
-              .date(d + 1)
               .month(m)
+              .date(d + 1)
               .format("YYYY-MM-DD"),
             activities: activities.map((a) => ({
               activity: a,
