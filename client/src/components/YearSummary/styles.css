@@ -12,7 +12,23 @@
 .YearSummary .month {
 }  
 */
-.YearSummary .day {
+.monthStats {
+  margin-bottom: 10px;
+}
+.monthStat {
+  width: 16px;
+  height: 16px;
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  color: #000;
+}
+.day {
   position: relative;
   /* HACK should match the visualisation */
   width: 20px;
@@ -23,16 +39,17 @@
   justify-content: center;
   cursor: pointer;
   border-radius: 50%;
+  box-sizing: border-box;
 }
-.YearSummary .day:hover {
+.day:hover {
   background: rgba(255,255,255,0.5);
 }
-.YearSummary .day > div {
+.day > div {
   position: relative;
   height: 100%;
   z-index: 1;
 }
-.YearSummary .day .dayNumber {
+.day .dayNumber {
   position: absolute;
   border: 0.5px solid rgba(255,255,255,0.25);
   border-radius: 50%;
@@ -45,10 +62,10 @@
   font-size: 6pt;
   box-sizing: content-box;
 }
-.YearSummary .day.-today {
+.day.-today {
   border: 2px solid rgba(255,0,0,.5);
 }
-.YearSummary .day.-weekend .dayNumber {
+.day.-weekend .dayNumber {
   background-color: rgba(255,255,255,0.2);
 }
 

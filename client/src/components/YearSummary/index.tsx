@@ -9,10 +9,10 @@ import { IDay } from "../../types/IDay";
 import { useState } from "react";
 import { DayEditor } from "../DayEditor";
 import { Box, Modal } from "@mui/material";
-import { CSSProperties } from "@emotion/serialize";
 import { useDays } from "../../hooks/useDays";
-import { YearStats } from "../YearStats";
+import { computeStats, YearStats } from "../YearStats";
 import { useApp } from "../../hooks/useApp";
+import { useActivities } from "../../hooks/useActivities";
 
 const style = {
   position: "absolute",
@@ -33,6 +33,7 @@ export interface IYearSummaryProps {}
 export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
   const { subscription, setSubscription } = useApp();
   const { days } = useDays();
+  const { activities } = useActivities();
   const months = groupBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").month());
   const [editdate, setEditDate] = useState<IDay>();
 
@@ -41,8 +42,21 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
       <div className="YearSummary">
         {Object.values(months).map((days) => {
           days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
+          const stats = computeStats(days, activities);
+
           return (
             <div className="month">
+              <div className="monthStats">
+                {(stats || []).map((a) => (
+                  <div
+                    className="monthStat"
+                    style={{ backgroundColor: a.activity.color }}
+                  >
+                    {a.count}
+                  </div>
+                ))}
+              </div>
+
               {days.map((d) => {
                 const onClick = () => setEditDate(d);
                 const activityCount = d.activities.reduce(
