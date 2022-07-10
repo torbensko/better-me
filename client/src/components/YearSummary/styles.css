@@ -2,15 +2,15 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  /* max-width: 360px; */
   margin: 0 auto;
-  /* padding for the stats */
   padding-bottom: 10px;
   text-align: center;
 }
-/* .monthStats {
+/* 
+.monthStats {
   margin-bottom: 10px;
-} */
+} 
+*/
 .monthStat {
   width: 18px;
   height: 18px;
@@ -61,10 +61,12 @@
 .day.-today {
   border: 3px solid rgba(255, 107, 107, 0.5);
 }
+/* 
 .day.-tooMuchTraining,
 .day.-tooMuchRest {
   background-color: rgb(12 39 74);
-}
+} 
+*/
 .day.-goodDay {
   background-color: rgb(16, 118, 85);
 }
