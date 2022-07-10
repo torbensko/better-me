@@ -13,6 +13,7 @@ import { useDays } from "../../hooks/useDays";
 import { computeStats, YearStats } from "../YearStats";
 import { useApp } from "../../hooks/useApp";
 import { useActivities } from "../../hooks/useActivities";
+import { VStack } from "../VStack";
 
 const style = {
   position: "absolute",
@@ -41,66 +42,105 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
 
   return (
     <>
-      <div className="YearSummary">
-        {Object.values(months).map((days) => {
-          days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
-          const stats = computeStats(days, activities);
+      <VStack>
+        {/* TODO move to a component */}
+        <div className="YearSummary">
+          {Object.values(months).map((days) => {
+            days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
+            const stats = computeStats(days, activities);
 
-          return (
-            <div className="month">
-              <div className="monthStats">
-                {(stats || []).map((a) => (
+            return (
+              <div className="month">
+                <div className="monthStats">
                   <div
                     className="monthStat"
-                    style={{ backgroundColor: a.activity.color }}
+                    style={{ backgroundColor: "#fff" }}
                   >
-                    {a.count}
+                    {(stats || []).reduce((total, x) => x.count + total, 0)}
                   </div>
-                ))}
+                  {(stats || []).map((a) => (
+                    <div
+                      className="monthStat"
+                      style={{ backgroundColor: a.activity.color }}
+                    >
+                      {a.count}
+                    </div>
+                  ))}
+                </div>
               </div>
+            );
+          })}
+        </div>
+        <div className="YearSummary">
+          <YearStats />
+        </div>
+        {/* TODO move to a component */}
+        <div className="YearSummary">
+          {Object.values(months).map((days) => {
+            days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
+            const stats = computeStats(days, activities);
 
-              {days.map((d) => {
-                const onClick = () => setEditDate(d);
-                const activityCount = d.activities.reduce(
-                  (total, x) => x.timesPerformed + total,
-                  0
-                );
-                const className = ["day"];
-                const date = dayjs(d.date, "YYYY-MM-DD");
-                const dayOfWeek = date.day();
-
-                streak.push(activityCount);
-                if (streak.length > 7) streak = streak.slice(1);
-
-                const tooMuchTraining =
-                  streak.filter((n) => !n).length > 2 && !activityCount;
-                const tooMuchRest =
-                  streak.filter((n) => n).length > 5 && activityCount;
-
-                if (dayOfWeek === 0 || dayOfWeek === 6)
-                  className.push("-weekend");
-                if (date.isToday()) className.push("-today");
-
-                if (tooMuchTraining) className.push("-tooMuchRest");
-                if (tooMuchRest) className.push("-tooMuchTraining");
-                if (!tooMuchTraining && !tooMuchRest)
-                  className.push("-goodDay");
-
-                return (
-                  <div className={className.join(" ")} onClick={onClick}>
-                    {activityCount === 0 && (
-                      <div className="dayNumber">
-                        {dayjs(d.date, "YYYY-MM-DD").date()}
-                      </div>
-                    )}
-                    <Medalion size={20} day={d} />
+            return (
+              <div className="month">
+                {/* 
+                <div className="monthStats">
+                  <div className="monthStat" style={{ backgroundColor: "#fff" }}>
+                    {(stats || []).reduce((total, x) => x.count + total, 0)}
                   </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+                  {(stats || []).map((a) => (
+                    <div
+                      className="monthStat"
+                      style={{ backgroundColor: a.activity.color }}
+                    >
+                      {a.count}
+                    </div>
+                  ))}
+                </div> 
+                */}
+
+                {days.map((d) => {
+                  const onClick = () => setEditDate(d);
+                  const activityCount = d.activities.reduce(
+                    (total, x) => x.timesPerformed + total,
+                    0
+                  );
+                  const className = ["day"];
+                  const date = dayjs(d.date, "YYYY-MM-DD");
+                  const dayOfWeek = date.day();
+
+                  streak.push(activityCount);
+                  if (streak.length > 7) streak = streak.slice(1);
+
+                  const tooMuchTraining =
+                    streak.filter((n) => !n).length > 2 && !activityCount;
+                  const tooMuchRest =
+                    streak.filter((n) => n).length > 5 && activityCount;
+
+                  if (dayOfWeek === 0 || dayOfWeek === 6)
+                    className.push("-weekend");
+                  if (date.isToday()) className.push("-today");
+
+                  if (tooMuchTraining) className.push("-tooMuchRest");
+                  if (tooMuchRest) className.push("-tooMuchTraining");
+                  if (!tooMuchTraining && !tooMuchRest)
+                    className.push("-goodDay");
+
+                  return (
+                    <div className={className.join(" ")} onClick={onClick}>
+                      {activityCount === 0 && (
+                        <div className="dayNumber">
+                          {dayjs(d.date, "YYYY-MM-DD").date()}
+                        </div>
+                      )}
+                      <Medalion size={20} day={d} />
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </VStack>
       {!!subscription && (
         <>
           <div className="Details">
@@ -110,9 +150,9 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
               <a onClick={() => setSubscription("")}>Close</a>
             </small>
           </div>
-          <div className="Stats">
+          {/* <div className="Stats">
             <YearStats />
-          </div>
+          </div> */}
         </>
       )}
       <div style={{ height: "40px" }}></div>
