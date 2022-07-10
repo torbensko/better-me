@@ -63,14 +63,14 @@
   box-sizing: content-box;
 }
 .day.-today {
-  border: 3px solid rgba(255,0,0,.5);
+  border: 3px solid rgba(255, 107, 107, 0.5);
 }
 .day.-tooMuchTraining,
 .day.-tooMuchRest {
-  background-color: rgba(255, 0, 0, 0.119);
+  background-color: rgb(12 39 74);
 }
 .day.-goodDay {
-  background-color: rgba(23, 175, 186, 0.249);
+  background-color: rgb(16, 118, 85);
 }
 .day.-weekend {
   /* background-color: rgba(255, 255, 255, 0.132); */
