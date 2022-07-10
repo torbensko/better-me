@@ -16,15 +16,15 @@
   margin-bottom: 10px;
 }
 .monthStat {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   margin: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: #000;
 }
@@ -40,6 +40,7 @@
   cursor: pointer;
   border-radius: 50%;
   box-sizing: border-box;
+  border: 0.5px solid rgba(255,255,255,0.25);
 }
 .day:hover {
   background: rgba(255,255,255,0.5);
@@ -51,7 +52,6 @@
 }
 .day .dayNumber {
   position: absolute;
-  border: 0.5px solid rgba(255,255,255,0.25);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -63,10 +63,18 @@
   box-sizing: content-box;
 }
 .day.-today {
-  border: 2px solid rgba(255,0,0,.5);
+  border: 3px solid rgba(255,0,0,.5);
 }
-.day.-weekend .dayNumber {
-  background-color: rgba(255,255,255,0.2);
+.day.-tooMuchTraining,
+.day.-tooMuchRest {
+  background-color: rgba(255, 0, 0, 0.119);
+}
+.day.-goodDay {
+  background-color: rgba(23, 175, 186, 0.249);
+}
+.day.-weekend {
+  /* background-color: rgba(255, 255, 255, 0.132); */
+  border-width: 3px;
 }
 
 .Details {
