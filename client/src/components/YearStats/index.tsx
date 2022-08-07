@@ -40,7 +40,7 @@ export const YearStats: React.FC<IYearStatsProps> = ({}) => {
     <div className="YearStats">
       <ul>
         {stats.map((stat) => (
-          <li>
+          <li key={stat.activity.title}>
             <label>
               <span
                 className="dot"

@@ -37,8 +37,6 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
   const { activities } = useActivities();
   const months = groupBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").month());
   const [editdate, setEditDate] = useState<IDay>();
-  // the number of days training/resting in the last 7
-  let streak: number[] = [];
 
   return (
     <>
@@ -100,34 +98,22 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
 
                 {days.map((d) => {
                   const onClick = () => setEditDate(d);
-                  const activityCount = d.activities.reduce(
-                    (total, x) => x.timesPerformed + total,
-                    0
-                  );
+
+                  
                   const className = ["day"];
                   const date = dayjs(d.date, "YYYY-MM-DD");
                   const dayOfWeek = date.day();
-
-                  streak.push(activityCount);
-                  if (streak.length > 7) streak = streak.slice(1);
-
-                  const tooMuchTraining =
-                    streak.filter((n) => !n).length > 2 && !activityCount;
-                  const tooMuchRest =
-                    streak.filter((n) => n).length > 5 && activityCount;
 
                   if (dayOfWeek === 0 || dayOfWeek === 6)
                     className.push("-weekend");
                   if (date.isToday()) className.push("-today");
 
-                  if (tooMuchTraining) className.push("-tooMuchRest");
-                  if (tooMuchRest) className.push("-tooMuchTraining");
-                  if (!tooMuchTraining && !tooMuchRest)
+                  if (d.isGoodDay)
                     className.push("-goodDay");
 
                   return (
                     <div className={className.join(" ")} onClick={onClick}>
-                      {activityCount === 0 && (
+                      {d.activityCount === 0 && (
                         <div className="dayNumber">
                           {dayjs(d.date, "YYYY-MM-DD").date()}
                         </div>
