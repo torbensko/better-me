@@ -29,6 +29,14 @@ const style = {
 
 dayjs.extend(isToday);
 
+// taken from: https://colordesigner.io/gradient-generator
+const ratioColors = ["#fa6e6e", "#e87e3b", "#c19303", "#87a500", "#15b141"];
+
+const ratioToColor = (ratio: number): string => {
+  // min(4,) to cater for 100% (round down)
+  return ratioColors[Math.min(4, Math.floor(ratio * 5))];
+};
+
 export interface IYearSummaryProps {}
 
 export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
@@ -41,65 +49,58 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
   return (
     <>
       <VStack>
-        {/* TODO move to a component */}
-        <div className="YearSummary">
-          {Object.values(months).map((days) => {
-            days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
-            const stats = computeStats(days, activities);
+        <div>
+          {/* TODO move to a component */}
+          <div className="YearSummary">
+            {Object.values(months).map((days) => {
+              days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
+              const stats = computeStats(days, activities);
 
-            return (
-              <div className="month">
-                <div className="monthStats">
-                  <div
-                    className="monthStat"
-                    style={{ backgroundColor: "#fff" }}
-                  >
-                    {(stats || []).reduce((total, x) => x.count + total, 0)}
-                  </div>
-                  {(stats || []).map((a) => (
-                    <div
-                      className="monthStat"
-                      style={{ backgroundColor: a.activity.color }}
-                    >
-                      {a.count}
+              const activityCount = (stats || []).reduce(
+                (total, x) => x.count + total,
+                0
+              );
+
+              return (
+                <div className="month">
+                  <div className="monthStats">
+                    {(stats || []).map((a) => (
+                      <div
+                        className="monthStat"
+                        style={{ backgroundColor: a.activity.color }}
+                      >
+                        {a.count}
+                      </div>
+                    ))}
+                    <div className="monthStat -activityCount">
+                      {activityCount}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="YearSummary">
+              );
+            })}
+          </div>
           <YearStats />
         </div>
         {/* TODO move to a component */}
         <div className="YearSummary">
           {Object.values(months).map((days) => {
             days = orderBy(days, (d) => dayjs(d.date, "YYYY-MM-DD").date());
-            const stats = computeStats(days, activities);
+            const goodRatio =
+              (days || []).filter((d) => d.isGoodDay).length / days.length;
 
             return (
               <div className="month">
-                {/* 
-                <div className="monthStats">
-                  <div className="monthStat" style={{ backgroundColor: "#fff" }}>
-                    {(stats || []).reduce((total, x) => x.count + total, 0)}
-                  </div>
-                  {(stats || []).map((a) => (
-                    <div
-                      className="monthStat"
-                      style={{ backgroundColor: a.activity.color }}
-                    >
-                      {a.count}
-                    </div>
-                  ))}
-                </div> 
-                */}
+                <div
+                  className="monthStat -goodRatio"
+                  style={{ backgroundColor: ratioToColor(goodRatio) }}
+                >
+                  {Math.round(goodRatio * 100)}
+                </div>
 
                 {days.map((d) => {
                   const onClick = () => setEditDate(d);
 
-                  
                   const className = ["day"];
                   const date = dayjs(d.date, "YYYY-MM-DD");
                   const dayOfWeek = date.day();
@@ -108,8 +109,7 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
                     className.push("-weekend");
                   if (date.isToday()) className.push("-today");
 
-                  if (d.isGoodDay)
-                    className.push("-goodDay");
+                  if (d.isGoodDay) className.push("-goodDay");
 
                   return (
                     <div className={className.join(" ")} onClick={onClick}>
@@ -126,9 +126,7 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
             );
           })}
         </div>
-      </VStack>
-      {!!subscription && (
-        <>
+        {!!subscription && (
           <div className="Details">
             Subscription: {subscription}
             <br />
@@ -136,11 +134,8 @@ export const YearSummary: React.FC<IYearSummaryProps> = ({}) => {
               <a onClick={() => setSubscription("")}>Close</a>
             </small>
           </div>
-          {/* <div className="Stats">
-            <YearStats />
-          </div> */}
-        </>
-      )}
+        )}
+      </VStack>
       <div style={{ height: "40px" }}></div>
       <Modal
         open={!!editdate}
